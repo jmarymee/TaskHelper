@@ -152,8 +152,10 @@
         var context = asyncResult.context;
 
         // Process the returned response here.
+        
+        Office.context.mailbox.g
 
-        $('#tasks').text(result);
+        $('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
     }
 
 
