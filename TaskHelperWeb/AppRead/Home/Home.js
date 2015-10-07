@@ -1,5 +1,6 @@
 ﻿/// <reference path="../App.js" />
 
+
 (function () {
     "use strict";
 
@@ -11,10 +12,18 @@
 //            displayItemDetails();
             //displayTasks();
             //displaySubject();
-//            sendGetAllTasks();
-            sendCreateTask();
+            sendGetAllTasks();
+            //sendCreateTask();
+
+            $('#createNewTasks').click(sendCreateAllTasks);
         });
     };
+
+    //Thus function iterates over a task object array and sends a create for each one
+    function sendCreateAllTasks() {
+        debugger;
+        sendCreateTask();
+    }
 
     function displayTasks() {
         var tasks = Office.context.mailbox.item.getEntitiesByType(Office.MailboxEnums.EntityType.TaskSuggestion);
@@ -148,16 +157,16 @@
     function getSubjectRequest(id) {
         // Return a GetItem operation request for the subject of the specified item. 
         var result = getBodyPrefix() +
-             '    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
-             '      <ItemShape>' +
-             '        <t:BaseShape>IdOnly</t:BaseShape>' +
-             '        <t:AdditionalProperties>' +
-             '            <t:FieldURI FieldURI="item:Subject"/>' +
-             '        </t:AdditionalProperties>' +
-             '      </ItemShape>' +
-             '      <ItemIds><t:ItemId Id="' + id + '"/></ItemIds>' +
-             '    </GetItem>' +
-             '  </soap:Body>' +
+     '    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
+     '      <ItemShape>' +
+     '        <t:BaseShape>IdOnly</t:BaseShape>' +
+     '        <t:AdditionalProperties>' +
+     '            <t:FieldURI FieldURI="item:Subject"/>' +
+     '        </t:AdditionalProperties>' +
+     '      </ItemShape>' +
+     '      <ItemIds><t:ItemId Id="' + id + '"/></ItemIds>' +
+     '    </GetItem>' +
+     '  </soap:Body>' +
              getBodyPostfix();
 
         return result;
@@ -183,25 +192,24 @@
     function sendCreateTask() {
         var mailbox = Office.context.mailbox;
         var soap = getCreateTask();
-
+        debugger;
         mailbox.makeEwsRequestAsync(soap, callback);
     }
+
+    //This function takes a task JS objetc and creates ONE task using the EWS / O365 wrapped call
+    function sendCreateTaskWithData(newtask) {
+
+    }
+
+
 
     function callback(asyncResult) {
         var result = asyncResult.value;
         var context = asyncResult.context;
-
         // Process the returned response here.
         
 
 
-        $('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
+        //$('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
     }
-
-
-    function onProcessClick() {
-
-    }
-
-
 })();
