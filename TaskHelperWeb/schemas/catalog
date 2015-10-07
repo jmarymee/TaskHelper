@@ -1,0 +1,2 @@
+SYSTEM "http://schemas.microsoft.com/exchange/services/2006/messages" "./messages.xsd"
+SYSTEM "http://schemas.microsoft.com/exchange/services/2006/types" "./types.xsd"

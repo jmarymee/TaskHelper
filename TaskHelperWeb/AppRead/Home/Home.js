@@ -11,8 +11,8 @@
             displayItemDetails();
             //displayTasks();
             //displaySubject();
-            //sendGetAllTasks();
-            sendCreateTask();
+            sendGetAllTasks();
+            //sendCreateTask();
         });
     };
 
@@ -51,55 +51,90 @@
         }
     }
 
+    function getProperties() {
+        return '        <t:AdditionalProperties>' +
+        '          <t:FieldURI FieldURI="item:Subject" />' +
+//        '          <t:FieldURI FieldURI="item:Priority" />' +
+        '          <t:FieldURI FieldURI="item:Status" />' +
+        '        </t:AdditionalProperties>';
+    }
 
     function getAllTasks() {
-        var result = 
-            '<?xml version="1.0" encoding="utf-8"?>' +
-            '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
-            'xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
-            'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
-            'xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
-            '  <soap:Body>' +
-            '    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"' +
-            '    xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
-            '      <ItemShape>' +
+        var result = getBodyPrefix() +
+            '    <m:FindItem Traversal="Shallow">' +
+            '      <m:ItemShape>' +
             '        <t:BaseShape>AllProperties</t:BaseShape>' +
-            '      </ItemShape>' +
-            '    </GetItem>' +
-            '  </soap:Body>' +
-            '</soap:Envelope>'
+//                    getProperties() +
+            '      </m:ItemShape>' +
+                    getRestriction() +
+            '      <m:ParentFolderIds>' +
+            '        <t:DistinguishedFolderId Id="tasks"/>' +
+            '      </m:ParentFolderIds>' +
+            '    </m:FindItem>' +
+            getBodyPostfix();
+
         return result;
     }
 
-    function getCreateTask() {
-        var result =
-            '<?xml version="1.0" encoding="utf-8"?>' +
+    function getRestriction() {
+        return '      <m:Restriction>' +
+//        '        <t:And>' +
+        '          <t:IsNotEqualTo>' +
+        '            <t:FieldURI FieldURI="task:Status" />' +
+        '            <t:FieldURIOrConstant>' +
+        '              <t:Constant Value="2" />' +
+        '            </t:FieldURIOrConstant>' +
+        '          </t:IsNotEqualTo>' +
+//        '        </t:And>' +
+        '      </m:Restriction>';
+    }
+
+    function addSort() {
+        return
+            '      <m:SortOrder>' +
+            '        <t:FieldOrder Order="Descending">' +
+            '          <t:FieldURI FieldURI="item:Priority" />' +
+            '        </t:FieldOrder>' +
+            '      </m:SortOrder>';
+    }
+
+    function getBodyPrefix() {
+        return '<?xml version="1.0" encoding="utf-8"?>' +
             '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
             '               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
             '               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
+            '               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages" ' +
             '               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
-            '  <soap:Body>' +
-            '    <CreateItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"' +
-            '                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types" ' +
-            '                MessageDisposition="SaveOnly">' +
-            '      <Items>' +
+            '  <soap:Header>' +
+            '    <t:RequestServerVersion Version="Exchange2013" soap:mustUnderstand="0" />' +
+            '  </soap:Header>' +
+            '  <soap:Body>';
+    }
+
+    function getBodyPostfix() {
+        return '  </soap:Body>' +
+            '</soap:Envelope>';
+    }
+
+    function getCreateTask() {
+        var result = getBodyPrefix() +
+            '    <m:CreateItem>' +
+            '      <t:Items>' +
             '        <t:Task>' +
             '          <t:Subject>Test EWS TaskHelper</t:Subject>' +
             '          <t:DueDate>2006-10-26T21:32:52</t:DueDate>' +
             '          <t:Status>NotStarted</t:Status>' +
             '        </t:Task>' +
-            '      </Items>' +
-            '    </CreateItem>' +
-            '  </soap:Body>' +
-            '</soap:Envelope>';
+            '      </t:Items>' +
+            '    </m:CreateItem>' +
+            getBodyPostfix();
 
         return result;
     }
 
     function getSubjectRequest(id) {
         // Return a GetItem operation request for the subject of the specified item. 
-        var result =
-     '<?xml version="1.0" encoding="utf-8"?>' +
+        var result = '<?xml version="1.0" encoding="utf-8"?>' +
      '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
      '               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
      '               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
@@ -153,7 +188,7 @@
 
         // Process the returned response here.
         
-        Office.context.mailbox.g
+
 
         $('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
     }
