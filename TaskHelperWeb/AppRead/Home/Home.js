@@ -78,33 +78,21 @@
             '               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
             '               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
             '               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
-            '  <soap:Header>' +
-            '    <t:RequestServerVersion Version="Exchange2007_SP1"/>' +
-            '    <t:TimeZoneContext>' +
-            '      <t:TimeZoneDefinition Id="Eastern Standard Time"/>' +
-            '    </t:TimeZoneContext>' +
-            '  </soap:Header>' +
             '  <soap:Body>' +
-            '    <CreateItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-            'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
-            '      <Items xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
-            '          <Task xmlns="http://schemas.microsoft.com/exchange/services/2006/types">' +
-            '            <Subject>Test EWS Task</Subject>' +
-            '            <Body BodyType="Text">This is a test EWS Task, please ignore</Body>' +
-            '            <Recurrence>' +
-            '              <WeeklyRegeneration>' +
-            '                <Interval>1</Interval>' +
-            '              </WeeklyRegeneration>' +
-            '              <NoEndRecurrence>' +
-            '                <StartDate>2015-12-01</StartDate>' +
-            '              </NoEndRecurrence>' +
-            '            </Recurrence>' +
-            '            <StartDate>2015-12-01T14:24:51.3876635-07:00</StartDate>' +
-            '          </Task>' +
+            '    <CreateItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"' +
+            '                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types" ' +
+            '                MessageDisposition="SaveOnly">' +
+            '      <Items>' +
+            '        <t:Task>' +
+            '          <t:Subject>Test EWS TaskHelper</t:Subject>' +
+            '          <t:DueDate>2006-10-26T21:32:52</t:DueDate>' +
+            '          <t:Status>NotStarted</t:Status>' +
+            '        </t:Task>' +
             '      </Items>' +
             '    </CreateItem>' +
             '  </soap:Body>' +
             '</soap:Envelope>';
+
         return result;
     }
 
@@ -117,7 +105,7 @@
      '               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
      '               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
      '  <soap:Header>' +
-     '    <RequestServerVersion Version="Exchange2013" xmlns="http://schemas.microsoft.com/exchange/services/2006/types" soap:mustUnderstand="0" />' +
+     '    <t:RequestServerVersion Version="Exchange2013" xmlns="http://schemas.microsoft.com/exchange/services/2006/types" soap:mustUnderstand="0" />' +
      '  </soap:Header>' +
      '  <soap:Body>' +
      '    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
