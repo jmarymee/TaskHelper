@@ -1,5 +1,6 @@
 ﻿/// <reference path="../App.js" />
 
+
 (function () {
     "use strict";
 
@@ -13,8 +14,16 @@
             //displaySubject();
             sendGetAllTasks();
             //sendCreateTask();
+
+            $('#createNewTasks').click(sendCreateAllTasks);
         });
     };
+
+    //Thus function iterates over a task object array and sends a create for each one
+    function sendCreateAllTasks() {
+        debugger;
+        sendCreateTask();
+    }
 
     function displayTasks() {
         var tasks = Office.context.mailbox.item.getEntitiesByType(Office.MailboxEnums.EntityType.TaskSuggestion);
@@ -178,23 +187,24 @@
     function sendCreateTask() {
         var mailbox = Office.context.mailbox;
         var soap = getCreateTask();
-
+        debugger;
         mailbox.makeEwsRequestAsync(soap, callback);
     }
+
+    //This function takes a task JS objetc and creates ONE task using the EWS / O365 wrapped call
+    function sendCreateTaskWithData(newtask) {
+
+    }
+
+
 
     function callback(asyncResult) {
         var result = asyncResult.value;
         var context = asyncResult.context;
-
         // Process the returned response here.
         
 
 
-        $('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
+        //$('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
     }
-
-
-
-
-
 })();
