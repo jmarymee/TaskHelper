@@ -128,13 +128,13 @@
     function getCreateTask() {
         var result = getBodyPrefix() +
             '    <m:CreateItem>' +
-            '      <t:Items>' +
+            '      <m:Items>' +
             '        <t:Task>' +
             '          <t:Subject>Test EWS TaskHelper</t:Subject>' +
             '          <t:DueDate>2006-10-26T21:32:52</t:DueDate>' +
             '          <t:Status>NotStarted</t:Status>' +
             '        </t:Task>' +
-            '      </t:Items>' +
+            '      </m:Items>' +
             '    </m:CreateItem>' +
             getBodyPostfix();
 
