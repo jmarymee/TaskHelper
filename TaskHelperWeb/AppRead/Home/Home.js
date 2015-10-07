@@ -10,7 +10,9 @@
 
             displayItemDetails();
             //displayTasks();
-            displaySubject();
+            //displaySubject();
+            //sendGetAllTasks();
+            sendCreateTask();
         });
     };
 
@@ -50,6 +52,61 @@
     }
 
 
+    function getAllTasks() {
+        var result = 
+            '<?xml version="1.0" encoding="utf-8"?>' +
+            '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
+            'xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
+            'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
+            'xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
+            '  <soap:Body>' +
+            '    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages"' +
+            '    xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
+            '      <ItemShape>' +
+            '        <t:BaseShape>AllProperties</t:BaseShape>' +
+            '      </ItemShape>' +
+            '    </GetItem>' +
+            '  </soap:Body>' +
+            '</soap:Envelope>'
+        return result;
+    }
+
+    function getCreateTask() {
+        var result =
+            '<?xml version="1.0" encoding="utf-8"?>' +
+            '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
+            '               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
+            '               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
+            '               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
+            '  <soap:Header>' +
+            '    <t:RequestServerVersion Version="Exchange2007_SP1"/>' +
+            '    <t:TimeZoneContext>' +
+            '      <t:TimeZoneDefinition Id="Eastern Standard Time"/>' +
+            '    </t:TimeZoneContext>' +
+            '  </soap:Header>' +
+            '  <soap:Body>' +
+            '    <CreateItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+            'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
+            '      <Items xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
+            '          <Task xmlns="http://schemas.microsoft.com/exchange/services/2006/types">' +
+            '            <Subject>Test EWS Task</Subject>' +
+            '            <Body BodyType="Text">This is a test EWS Task, please ignore</Body>' +
+            '            <Recurrence>' +
+            '              <WeeklyRegeneration>' +
+            '                <Interval>1</Interval>' +
+            '              </WeeklyRegeneration>' +
+            '              <NoEndRecurrence>' +
+            '                <StartDate>2015-12-01</StartDate>' +
+            '              </NoEndRecurrence>' +
+            '            </Recurrence>' +
+            '            <StartDate>2015-12-01T14:24:51.3876635-07:00</StartDate>' +
+            '          </Task>' +
+            '      </Items>' +
+            '    </CreateItem>' +
+            '  </soap:Body>' +
+            '</soap:Envelope>';
+        return result;
+    }
 
     function getSubjectRequest(id) {
         // Return a GetItem operation request for the subject of the specified item. 
@@ -83,6 +140,21 @@
         var mailbox = Office.context.mailbox;
         var id = mailbox.item.itemId;
         var soap = getSubjectRequest(id);
+
+        mailbox.makeEwsRequestAsync(soap, callback);
+    }
+
+    function sendGetAllTasks() {
+        var mailbox = Office.context.mailbox;
+        var soap = getAllTasks();
+
+        mailbox.makeEwsRequestAsync(soap, callback);
+    }
+
+
+    function sendCreateTask() {
+        var mailbox = Office.context.mailbox;
+        var soap = getCreateTask();
 
         mailbox.makeEwsRequestAsync(soap, callback);
     }
