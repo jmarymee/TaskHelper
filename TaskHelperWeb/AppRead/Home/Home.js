@@ -15,14 +15,30 @@
             sendGetAllTasks();
             //sendCreateTask();
 
-            $('#createNewTasks').click(sendCreateAllTasks);
+            $('#createNewTasks').click(getListOfTasksToCreate);
         });
     };
 
-    //Thus function iterates over a task object array and sends a create for each one
-    function sendCreateAllTasks() {
+    //This test method creates an array of strings (tasks) and sends to the createAllMethod
+    function getListOfTasksToCreate() {
+        var arrayofTasks = ['task1', 'task2', 'task3'];
         debugger;
-        sendCreateTask();
+        sendCreateAllTasks(arrayofTasks);
+    }
+
+    //Thus function iterates over a task object array and sends a create for each one
+    function sendCreateAllTasks(arrayOfTasks) {
+
+        var arrayLen = arrayOfTasks.length;
+        var loop = 0;
+        for (loop = 0; loop < arrayLen; loop++) {
+
+            var taskName = {
+                taskName: arrayOfTasks[loop],
+                startDateString: '2015-10-08T21:32:52'
+            }  
+            sendCreateTask(taskName);
+        }
     }
 
     function displayTasks() {
@@ -125,13 +141,15 @@
             '</soap:Envelope>';
     }
 
-    function getCreateTask() {
+    function getCreateTask(taskObject) {
+        //sample date
+        //2006-10-26T21:32:52
         var result = getBodyPrefix() +
             '    <m:CreateItem>' +
             '      <m:Items>' +
             '        <t:Task>' +
-            '          <t:Subject>Test EWS TaskHelper</t:Subject>' +
-            '          <t:DueDate>2006-10-26T21:32:52</t:DueDate>' +
+            '          <t:Subject>'+taskObject.taskName+'</t:Subject>' +
+            '          <t:DueDate>'+taskObject.startDateString+'</t:DueDate>' +
             '          <t:Status>NotStarted</t:Status>' +
             '        </t:Task>' +
             '      </m:Items>' +
@@ -178,16 +196,16 @@
 
     function sendGetAllTasks() {
         var mailbox = Office.context.mailbox;
+
         var soap = getAllTasks();
 
         mailbox.makeEwsRequestAsync(soap, callback);
     }
 
 
-    function sendCreateTask() {
+    function sendCreateTask(taskName) {
         var mailbox = Office.context.mailbox;
-        var soap = getCreateTask();
-        debugger;
+        var soap = getCreateTask(taskName);
         mailbox.makeEwsRequestAsync(soap, callback);
     }
 
