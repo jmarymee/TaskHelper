@@ -126,9 +126,11 @@
             '</soap:Envelope>';
     }
 
+    //This method creates a single task embedded in a SOAP string (EWS call)
     function getCreateTask(taskObject) {
         //sample date
         //2006-10-26T21:32:52
+        //sample object = { taskName: value, startdatString: startDate }
         var result = getBodyPrefix() +
             '    <m:CreateItem>' +
             '      <m:Items>' +
@@ -144,6 +146,7 @@
         return result;
     }
 
+    //This method creates an array of tasks using a single web call. The array of tasks is formatted as list of tasks in XML format
     function getCreateTaskList(arrayOfTasks) {
         //sample date
         //2006-10-26T21:32:52
@@ -161,6 +164,7 @@
     }
 
     //This function takes an array of tasks and creates a soap-formatted list of new tasks to create
+    //It needs a SOAP header and tail added before sending the web call
     function appendListOfTasks(arrayOfTasks) {
         var soaptaskList = '';
         var dateString = '2015-10-08T21:32:52';
@@ -202,6 +206,7 @@
         return result;
     }
 
+    //This is the generalized call to EWS for task create
     function sendRequest() {
         // Create a local variable that contains the mailbox.
         var mailbox = Office.context.mailbox;
@@ -227,20 +232,12 @@
         mailbox.makeEwsRequestAsync(soap, callback);
     }
 
-    //This function takes a task JS objetc and creates ONE task using the EWS / O365 wrapped call
-    function sendCreateTaskWithData(newtask) {
-
-    }
-
-
-
     function callback(asyncResult) {
         var result = asyncResult.value;
         var context = asyncResult.context;
         // Process the returned response here.
         
-
-
+        //Brad's diagnostic call
         //$('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
     }
 })();
