@@ -167,7 +167,8 @@
     //It needs a SOAP header and tail added before sending the web call
     function appendListOfTasks(arrayOfTasks) {
         var soaptaskList = '';
-        var dateString = '2015-10-08T21:32:52';
+        //var dateString = '2015-10-08T21:32:52';
+        var dateString = new Date().toISOString();
 
         for (var loop = 0; loop < arrayOfTasks.length; loop++) {
             soaptaskList = soaptaskList +
