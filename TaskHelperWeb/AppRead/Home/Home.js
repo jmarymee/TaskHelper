@@ -9,7 +9,7 @@
         $(document).ready(function () {
             app.initialize();
 
-            displayItemDetails();
+//            displayItemDetails();
             //displayTasks();
             //displaySubject();
             sendGetAllTasks();
@@ -126,19 +126,29 @@
             '</soap:Envelope>';
     }
 
+<<<<<<< HEAD
     //This method creates a single task embedded in a SOAP string (EWS call)
     function getCreateTask(taskObject) {
         //sample date
         //2006-10-26T21:32:52
         //sample object = { taskName: value, startdatString: startDate }
+=======
+
+
+    function getCreateTask() {
+>>>>>>> upstream/master
         var result = getBodyPrefix() +
-            '    <m:CreateItem>' +
+            '    <m:CreateItem MessageDisposition="SaveOnly">' +
             '      <m:Items>' +
+<<<<<<< HEAD
             '        <t:Task>' +
             '          <t:Subject>'+taskObject.taskName+'</t:Subject>' +
             '          <t:DueDate>'+taskObject.startDateString+'</t:DueDate>' +
             '          <t:Status>NotStarted</t:Status>' +
             '        </t:Task>' +
+=======
+                    getTask("Test EWS TaskHelper", "NotStarted") +
+>>>>>>> upstream/master
             '      </m:Items>' +
             '    </m:CreateItem>' +
             getBodyPostfix();
@@ -146,6 +156,7 @@
         return result;
     }
 
+<<<<<<< HEAD
     //This method creates an array of tasks using a single web call. The array of tasks is formatted as list of tasks in XML format
     function getCreateTaskList(arrayOfTasks) {
         //sample date
@@ -179,18 +190,26 @@
         }
         return soaptaskList;
     }
+=======
+
+    //        <t:Task>' +
+    //          <t:Subject>Test EWS TaskHelper</t:Subject>' +
+    //          <t:DueDate>2006-10-26T21:32:52</t:DueDate>' +
+    //          <t:Status>NotStarted</t:Status>' +
+    //        </t:Task>' +
+
+    function getTask(subject, status) {
+        return  '        <t:Task>' +
+                '          <t:Subject>' + subject + '</t:Subject>' +
+                '          <t:Status>'+ status +'</t:Status>' +
+                '        </t:Task>';
+    }
+
+>>>>>>> upstream/master
 
     function getSubjectRequest(id) {
         // Return a GetItem operation request for the subject of the specified item. 
-        var result = '<?xml version="1.0" encoding="utf-8"?>' +
-     '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
-     '               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
-     '               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
-     '               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
-     '  <soap:Header>' +
-     '    <t:RequestServerVersion Version="Exchange2013" xmlns="http://schemas.microsoft.com/exchange/services/2006/types" soap:mustUnderstand="0" />' +
-     '  </soap:Header>' +
-     '  <soap:Body>' +
+        var result = getBodyPrefix() +
      '    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
      '      <ItemShape>' +
      '        <t:BaseShape>IdOnly</t:BaseShape>' +
@@ -201,7 +220,7 @@
      '      <ItemIds><t:ItemId Id="' + id + '"/></ItemIds>' +
      '    </GetItem>' +
      '  </soap:Body>' +
-     '</soap:Envelope>';
+             getBodyPostfix();
 
         return result;
     }
