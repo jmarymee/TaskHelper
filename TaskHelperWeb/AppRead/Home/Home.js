@@ -75,7 +75,7 @@
             '        <t:BaseShape>AllProperties</t:BaseShape>' +
 //                    getProperties() +
             '      </m:ItemShape>' +
-                    getRestriction() +
+//                    getRestriction() +
             '      <m:ParentFolderIds>' +
             '        <t:DistinguishedFolderId Id="tasks"/>' +
             '      </m:ParentFolderIds>' +
