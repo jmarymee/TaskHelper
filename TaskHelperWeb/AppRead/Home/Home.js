@@ -15,14 +15,15 @@
             sendGetAllTasks();
             //sendCreateTask();
 
-            $('#createNewTasks').click(sendCreateAllTasks);
+            $('#createNewTasks').click(getListOfTasksToCreate);
         });
     };
 
-    //Thus function iterates over a task object array and sends a create for each one
-    function sendCreateAllTasks() {
+    //This test method creates an array of strings (tasks) and sends to the createAllMethod
+    function getListOfTasksToCreate() {
+        var arrayofTasks = ['task1', 'task2', 'task3','task4','task5','task6'];
         debugger;
-        sendCreateTask();
+        sendCreateTask(arrayofTasks);
     }
 
     function displayTasks() {
@@ -125,13 +126,29 @@
             '</soap:Envelope>';
     }
 
+<<<<<<< HEAD
+    //This method creates a single task embedded in a SOAP string (EWS call)
+    function getCreateTask(taskObject) {
+        //sample date
+        //2006-10-26T21:32:52
+        //sample object = { taskName: value, startdatString: startDate }
+=======
 
 
     function getCreateTask() {
+>>>>>>> upstream/master
         var result = getBodyPrefix() +
             '    <m:CreateItem MessageDisposition="SaveOnly">' +
             '      <m:Items>' +
+<<<<<<< HEAD
+            '        <t:Task>' +
+            '          <t:Subject>'+taskObject.taskName+'</t:Subject>' +
+            '          <t:DueDate>'+taskObject.startDateString+'</t:DueDate>' +
+            '          <t:Status>NotStarted</t:Status>' +
+            '        </t:Task>' +
+=======
                     getTask("Test EWS TaskHelper", "NotStarted") +
+>>>>>>> upstream/master
             '      </m:Items>' +
             '    </m:CreateItem>' +
             getBodyPostfix();
@@ -139,6 +156,41 @@
         return result;
     }
 
+<<<<<<< HEAD
+    //This method creates an array of tasks using a single web call. The array of tasks is formatted as list of tasks in XML format
+    function getCreateTaskList(arrayOfTasks) {
+        //sample date
+        //2006-10-26T21:32:52
+        var itemsList = appendListOfTasks(arrayOfTasks);
+
+        var result = getBodyPrefix() +
+            '    <m:CreateItem>' +
+            '      <m:Items>' +
+                    itemsList +
+            '      </m:Items>' +
+            '    </m:CreateItem>' +
+            getBodyPostfix();
+
+        return result;
+    }
+
+    //This function takes an array of tasks and creates a soap-formatted list of new tasks to create
+    //It needs a SOAP header and tail added before sending the web call
+    function appendListOfTasks(arrayOfTasks) {
+        var soaptaskList = '';
+        var dateString = '2015-10-08T21:32:52';
+
+        for (var loop = 0; loop < arrayOfTasks.length; loop++) {
+            soaptaskList = soaptaskList +
+            '        <t:Task>' +
+            '          <t:Subject>' + arrayOfTasks[loop] + '</t:Subject>' +
+            '          <t:DueDate>' + dateString + '</t:DueDate>' +
+            '          <t:Status>NotStarted</t:Status>' +
+            '        </t:Task>'
+        }
+        return soaptaskList;
+    }
+=======
 
     //        <t:Task>' +
     //          <t:Subject>Test EWS TaskHelper</t:Subject>' +
@@ -153,6 +205,7 @@
                 '        </t:Task>';
     }
 
+>>>>>>> upstream/master
 
     function getSubjectRequest(id) {
         // Return a GetItem operation request for the subject of the specified item. 
@@ -172,6 +225,7 @@
         return result;
     }
 
+    //This is the generalized call to EWS for task create
     function sendRequest() {
         // Create a local variable that contains the mailbox.
         var mailbox = Office.context.mailbox;
@@ -183,33 +237,26 @@
 
     function sendGetAllTasks() {
         var mailbox = Office.context.mailbox;
+
         var soap = getAllTasks();
 
         mailbox.makeEwsRequestAsync(soap, callback);
     }
 
 
-    function sendCreateTask() {
+    //Receives an array of tasks, formats the SOAP header and then makes a single call to create all of the tasks
+    function sendCreateTask(arrayOfTasks) {
         var mailbox = Office.context.mailbox;
-        var soap = getCreateTask();
-        debugger;
+        var soap = getCreateTaskList(arrayOfTasks);
         mailbox.makeEwsRequestAsync(soap, callback);
     }
-
-    //This function takes a task JS objetc and creates ONE task using the EWS / O365 wrapped call
-    function sendCreateTaskWithData(newtask) {
-
-    }
-
-
 
     function callback(asyncResult) {
         var result = asyncResult.value;
         var context = asyncResult.context;
         // Process the returned response here.
         
-
-
+        //Brad's diagnostic call
         //$('#tasks').text("EWS URL: " + Office.context.mailbox.ewsUrl + "\n" + result);
     }
 })();
