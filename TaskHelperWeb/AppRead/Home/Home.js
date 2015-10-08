@@ -21,24 +21,9 @@
 
     //This test method creates an array of strings (tasks) and sends to the createAllMethod
     function getListOfTasksToCreate() {
-        var arrayofTasks = ['task1', 'task2', 'task3'];
+        var arrayofTasks = ['task1', 'task2', 'task3','task4','task5','task6'];
         debugger;
-        sendCreateAllTasks(arrayofTasks);
-    }
-
-    //Thus function iterates over a task object array and sends a create for each one
-    function sendCreateAllTasks(arrayOfTasks) {
-
-        var arrayLen = arrayOfTasks.length;
-        var loop = 0;
-        for (loop = 0; loop < arrayLen; loop++) {
-
-            var taskName = {
-                taskName: arrayOfTasks[loop],
-                startDateString: '2015-10-08T21:32:52'
-            }  
-            sendCreateTask(taskName);
-        }
+        sendCreateTask(arrayofTasks);
     }
 
     function displayTasks() {
@@ -159,6 +144,38 @@
         return result;
     }
 
+    function getCreateTaskList(arrayOfTasks) {
+        //sample date
+        //2006-10-26T21:32:52
+        var itemsList = appendListOfTasks(arrayOfTasks);
+
+        var result = getBodyPrefix() +
+            '    <m:CreateItem>' +
+            '      <m:Items>' +
+                    itemsList +
+            '      </m:Items>' +
+            '    </m:CreateItem>' +
+            getBodyPostfix();
+
+        return result;
+    }
+
+    //This function takes an array of tasks and creates a soap-formatted list of new tasks to create
+    function appendListOfTasks(arrayOfTasks) {
+        var soaptaskList = '';
+        var dateString = '2015-10-08T21:32:52';
+
+        for (var loop = 0; loop < arrayOfTasks.length; loop++) {
+            soaptaskList = soaptaskList +
+            '        <t:Task>' +
+            '          <t:Subject>' + arrayOfTasks[loop] + '</t:Subject>' +
+            '          <t:DueDate>' + dateString + '</t:DueDate>' +
+            '          <t:Status>NotStarted</t:Status>' +
+            '        </t:Task>'
+        }
+        return soaptaskList;
+    }
+
     function getSubjectRequest(id) {
         // Return a GetItem operation request for the subject of the specified item. 
         var result = '<?xml version="1.0" encoding="utf-8"?>' +
@@ -203,9 +220,10 @@
     }
 
 
-    function sendCreateTask(taskName) {
+    //Receives an array of tasks, formats the SOAP header and then makes a single call to create all of the tasks
+    function sendCreateTask(arrayOfTasks) {
         var mailbox = Office.context.mailbox;
-        var soap = getCreateTask(taskName);
+        var soap = getCreateTaskList(arrayOfTasks);
         mailbox.makeEwsRequestAsync(soap, callback);
     }
 
